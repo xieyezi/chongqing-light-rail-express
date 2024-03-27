@@ -7,8 +7,6 @@ const loading = ref(false);
 
 const { remainingMinutes, remainingSeconds } = useTimeDown();
 
-const empty = "";
-
 const onRefresh = () => {
   setTimeout(() => {
     loading.value = false;
