@@ -1,0 +1,67 @@
+name: chongqing-light-rail-express-deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2 # use pnpm
+        with:
+          version: 7
+
+      - name: use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "pnpm"
+
+      - name: install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: build dist file
+        run: pnpm build
+
+      - name: copy nginx file to dist
+        uses: canastro/copy-file-action@master
+        with:
+          source: "nginx.conf"
+          target: "dist/nginx.conf"
+
+      - name: copy Dockerfile file to dist
+        uses: canastro/copy-file-action@master
+        with:
+          source: "Dockerfile"
+          target: "dist/Dockerfile"
+
+      - name: copy deploy file to dist
+        uses: canastro/copy-file-action@master
+        with:
+          source: "deploy.sh"
+          target: "dist/deploy.sh"
+
+      - name: upload dist files to ecs server
+        uses: cross-the-world/scp-pipeline@master
+        env:
+          WELCOME: "ssh scp ssh pipelines"
+          LASTSSH: "upload files after copying"
+        with:
+          host: ${{ secrets.SERVER_USER_HOST }}
+          user: ${{ secrets.SERVER_USER_NAME }}
+          pass: ${{ secrets.SERVER_USER_PASSWORD }}
+          connect_timeout: 15s
+          local: "dist"
+          remote: /webroot/chongqing-light-rail-express
+
+      - name: login ecs server by ssh and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_USER_HOST }}
+          username: ${{ secrets.SERVER_USER_NAME }}
+          password: ${{ secrets.SERVER_USER_PASSWORD }}
+          script: cd .. && cd webroot/chongqing-light-rail-express/dist && sh deploy.sh

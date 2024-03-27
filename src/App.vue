@@ -16,7 +16,7 @@ const onRefresh = () => {
 };
 
 const generateQRCode = async (text: string) => {
-  await QRCode.toCanvas(
+  await (QRCode as any).toCanvas(
     document.getElementById("code"),
     text,
     {
@@ -24,7 +24,7 @@ const generateQRCode = async (text: string) => {
       height: 200,
       margin: 0
     },
-    (err) => {
+    (err: any) => {
       console.error(err);
     }
   );

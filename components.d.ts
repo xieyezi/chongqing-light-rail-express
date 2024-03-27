@@ -7,10 +7,8 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    VanButton: typeof import('vant/es')['Button']
     VanIcon: typeof import('vant/es')['Icon']
     VanNavBar: typeof import('vant/es')['NavBar']
-    VanNoticeBar: typeof import('vant/es')['NoticeBar']
     VanPullRefresh: typeof import('vant/es')['PullRefresh']
   }
 }
