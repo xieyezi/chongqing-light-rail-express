@@ -12,7 +12,7 @@ const empty = "";
 const onRefresh = () => {
   setTimeout(() => {
     loading.value = false;
-  }, 1000);
+  }, 800);
 };
 
 const generateQRCode = async (text: string) => {
@@ -47,14 +47,10 @@ onMounted(() => {
         <p>请务必在预约时间段<span style="font-size: 18px; color: #eb9556">前5分钟</span>内进站</p>
       </div>
     </div>
-    <van-pull-refresh
-      class="pull-container"
-      v-model="loading"
-      :loosing-text="empty"
-      :loading-text="empty"
-      pulling-text="下拉刷新"
-      @refresh="onRefresh"
-    >
+    <van-pull-refresh class="pull-container" pulling-text="下拉刷新" loosing-text="下拉刷新" v-model="loading" @refresh="onRefresh">
+      <template #loading>
+        <van-loading type="spinner" size="14" />
+      </template>
       <div class="content">
         <div class="time-cacel">失效时间：{{ remainingMinutes }}分{{ remainingSeconds }}秒</div>
         <canvas id="code"></canvas>
