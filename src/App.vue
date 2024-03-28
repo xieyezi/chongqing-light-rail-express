@@ -5,7 +5,7 @@ import { useTimeDown } from "./hooks/useTimeDown";
 
 const loading = ref(false);
 
-const { remainingMinutes, remainingSeconds } = useTimeDown();
+const { formatToday, remainingMinutes, remainingSeconds } = useTimeDown();
 
 const onRefresh = () => {
   setTimeout(() => {
@@ -41,7 +41,7 @@ onMounted(() => {
         </template>
       </van-nav-bar>
       <div class="notice-bar">
-        <van-icon name="volume-o" size="18" style="padding-right: 5px" />
+        <van-icon name="volume-o" size="14" style="padding-right: 3px; margin-bottom: -2px" />
         <p>请务必在预约时间段<span style="font-size: 18px; color: #eb9556">前5分钟</span>内进站</p>
       </div>
     </div>
@@ -55,7 +55,7 @@ onMounted(() => {
         <div class="description">请凭此二维码，前往地铁站指定预约通道扫码进站</div>
         <div><span>6号线</span><span class="special">光电园站</span></div>
         <div class="info">
-          <span>2024-02-26</span>
+          <span>{{ formatToday }}</span>
           <span class="special">18:10~18:20</span>
         </div>
       </div>
@@ -132,7 +132,7 @@ body {
     padding: 5px 10px;
     font-size: 12px;
     background: rgba(246, 246, 246, 0.9);
-    color: #c1c1c1;
+    color: #929292;
     border-radius: 2px;
   }
 

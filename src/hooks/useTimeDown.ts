@@ -1,4 +1,4 @@
-import { startOfDay, addMinutes, addHours, differenceInMinutes, differenceInSeconds } from "date-fns";
+import { startOfDay, addMinutes, addHours, differenceInMinutes, differenceInSeconds, format } from "date-fns";
 import { onMounted, onUnmounted, ref } from "vue";
 
 function disablePageScroll() {
@@ -11,6 +11,7 @@ export function useTimeDown() {
 
   const today = startOfDay(currentTime.value);
   const targetTime = addMinutes(addHours(today, 18), 20);
+  const formatToday = format(today, "yyyy-MM-dd");
 
   const remainingMinutes = ref(differenceInMinutes(targetTime, currentTime.value));
   const remainingSeconds = ref(differenceInSeconds(targetTime, currentTime.value) % 60);
@@ -31,6 +32,7 @@ export function useTimeDown() {
   onUnmounted(() => clearInterval(intervalId));
 
   return {
+    formatToday,
     remainingMinutes,
     remainingSeconds
   };
